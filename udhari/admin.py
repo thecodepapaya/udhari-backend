@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from udhari.models import Udhari
+
+admin.site.register(Udhari)
