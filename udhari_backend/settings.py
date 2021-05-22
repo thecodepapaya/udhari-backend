@@ -25,7 +25,7 @@ SECRET_KEY = '*c9tvl7ue1e3zkbhl@bueb%btpwnta*&#29%8e+_6n8n^kom3h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'user.apps.UserConfig',
+    'udhari_user.apps.UdhariUserConfig',
     'udhari.apps.UdhariConfig',
     'trip.apps.TripConfig',
     'expense.apps.ExpenseConfig',
@@ -80,14 +80,21 @@ WSGI_APPLICATION = 'udhari_backend.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'udhari_backend',
+#         'USER': 'ashutosh',
+#         'PASSWORD': '1234',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'udhari_backend',
-        'USER': 'ashutosh',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
