@@ -26,7 +26,10 @@ class user(APIView):
 class register(APIView):
     def post(self, request, format=None):
         serializer = UdhariUserSerializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
+            print(request.data)
+            print(serializer.validated_data)
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
         print(serializer)
