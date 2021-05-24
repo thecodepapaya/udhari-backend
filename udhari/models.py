@@ -14,6 +14,8 @@ class Udhari(models.Model):
     isMerged = models.BooleanField(default=False)
     created_by = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='udhari_creator')
+    visible_to = models.ForeignKey(
+        UdhariUser, on_delete=models.CASCADE, related_name='udhari_visible_to')
 
     def __str__(self):
         return f'{self.id}: {self.amount} by {self.created_by}'
