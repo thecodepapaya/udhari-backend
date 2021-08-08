@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'trip.apps.TripConfig',
     'expense.apps.ExpenseConfig',
     'bill.apps.BillConfig',
-    # 'udhari_backend.udhari_user'
+    # 'udhari_user.models.UdhariUser',
 ]
 
 REST_FRAMEWORK = {
@@ -143,8 +143,8 @@ DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 
-# AUTH_USER_MODEL = 'udhari_user.UdhariUser'
+AUTH_USER_MODEL = 'udhari_user.UdhariUser'
 
-# AUTHENTICATION_BACKENDS = (
-#         'django.contrib.auth.backends.ModelBackend',
-# )
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+)
