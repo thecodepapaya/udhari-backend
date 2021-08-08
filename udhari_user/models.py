@@ -31,8 +31,6 @@ class UdhariUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     fcm_token = models.CharField(
         max_length=200, default="", null=True, blank=True)
-    auth_token = models.CharField(max_length=64)
-
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
 

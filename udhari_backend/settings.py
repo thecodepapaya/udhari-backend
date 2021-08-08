@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'trip.apps.TripConfig',
     'expense.apps.ExpenseConfig',
     'bill.apps.BillConfig',
-    'guardian',
+    'rest_framework.authtoken'
 ]
 
 REST_FRAMEWORK = {
@@ -147,5 +147,4 @@ AUTH_USER_MODEL = 'udhari_user.UdhariUser'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
 )
