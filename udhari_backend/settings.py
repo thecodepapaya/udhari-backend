@@ -43,11 +43,11 @@ INSTALLED_APPS = [
     'trip.apps.TripConfig',
     'expense.apps.ExpenseConfig',
     'bill.apps.BillConfig',
-    # 'udhari_user.models.UdhariUser',
+    'guardian',
 ]
 
 REST_FRAMEWORK = {
-'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning'
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning'
 }
 
 MIDDLEWARE = [
@@ -136,7 +136,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-DEFAULT_AUTO_FIELD='django.db.models.BigAutoField' 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -146,5 +146,6 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'udhari_user.UdhariUser'
 
 AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
 )
