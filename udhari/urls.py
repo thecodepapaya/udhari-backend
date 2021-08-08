@@ -4,8 +4,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from udhari import views
 
 urlpatterns = [
-    path('udhari/<pk>', views.udhari.as_view()),
-    # path('merge/', views.merge.as_view()),
+    path('', views.udhari.as_view()),
+    path('edit/<pk>', views.edit.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
