@@ -25,38 +25,7 @@ class ExpensePermission(BasePermission):
 class ExpenseViewSet(viewsets.ModelViewSet):
     permission_classes = [ExpensePermission]
     serializer_class = ExpenseSerializer
-    queryset = Expense.objects.all()
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
 
-    def list(self, request):
-        expenses = Expense.objects.filter(user=request.user)
-        serializer = ExpenseSerializer(expenses, many=True)
-        return Response(serializer.data, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def create(self, request):
-    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def retrieve(self, request, pk=None):
-    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def update(self, request, pk=None):
-    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def partial_update(self, request, pk=None):
-    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def destroy(self, request, pk=None):
-    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def get(self, request, format=None):
-    #     user = Expense.objects.all()
-    #     serializer = ExpenseSerializer(user, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # def post(self, request, format=None):
-    #     serializer = ExpenseSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        return Expense.objects.filter(user=self.request.user)
