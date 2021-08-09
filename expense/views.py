@@ -23,7 +23,8 @@ class ExpensePermission(BasePermission):
 
 
 class ExpenseViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, ExpensePermission]
+    # permission_classes = [IsAuthenticated, ExpensePermission]
+    permission_classes = [ExpensePermission]
     serializer_class = ExpenseSerializer
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
 

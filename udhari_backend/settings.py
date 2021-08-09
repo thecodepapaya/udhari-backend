@@ -43,14 +43,14 @@ INSTALLED_APPS = [
     'trip.apps.TripConfig',
     'expense.apps.ExpenseConfig',
     'bill.apps.BillConfig',
-    'rest_framework.authtoken'
+    # 'rest_framework.authtoken'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ],
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
