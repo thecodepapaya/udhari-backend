@@ -1,10 +1,11 @@
-# from django.urls import path
-# from user import views
-# from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
-# urlpatterns = [
-#     path('register/', views.register_user.as_view()),
-#     path('register/', views.register_user.as_view()),
-# ]
+from bill import views
+from rest_framework.routers import DefaultRouter
 
-# urlpatterns = format_suffix_patterns(urlpatterns)
+from .views import BillViewSet
+
+router = DefaultRouter()
+router.register(r'', BillViewSet, basename='bill')
+urlpatterns = router.urls

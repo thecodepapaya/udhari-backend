@@ -21,6 +21,6 @@ urlpatterns = [
     path('user/', include('udhari_user.urls')),
     path('expense/', include('expense.urls')),
     path('udhari/', include('udhari.urls')),
-    # path('bill/', include('bill.urls')),
+    path('bill/', include('bill.urls')),
     # path('trip/', include('trip.urls')),
 ]
