@@ -53,9 +53,7 @@ python manage.py migrate
 #==============================================#
 
 echo "Creating superuser"
-echo "Setting env variables"
-# DJANGO_SUPERUSER_PASSWORD="1234"
-python manage.py createsuperuser --username "ashutosh" --email "test@test.com" --skip-checks
+python manage.py createsuperuser --skip-checks
 
 
 

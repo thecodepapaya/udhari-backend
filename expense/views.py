@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -23,9 +23,10 @@ class ExpensePermission(BasePermission):
 
 
 class ExpenseViewSet(viewsets.ModelViewSet):
-    permission_classes = [ExpensePermission]
+    permission_classes = [IsAuthenticated, ExpensePermission]
     serializer_class = ExpenseSerializer
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
 
     def get_queryset(self):
+        print(f"Received user: {self.request.user}")
         return Expense.objects.filter(user=self.request.user)
