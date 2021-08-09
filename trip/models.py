@@ -9,7 +9,7 @@ class Trip(models.Model):
     created_by = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='trip_creator')
     total_amount = models.DecimalField(
-        max_digits=5, decimal_places=2, default=0.00)
+        max_digits=6, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f'{self.name} at {self.created_at} by {self.created_by}'

@@ -4,7 +4,7 @@ from udhari_user.models import UdhariUser
 
 class Udhari(models.Model):
     notes = models.CharField(max_length=200, blank=True, default="")
-    amount = models.DecimalField(max_digits=5, decimal_places=2)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
     borrower = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='udhari_borrower')
     lender = models.ForeignKey(
