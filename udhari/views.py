@@ -32,7 +32,7 @@ class UdhariViewSet(viewsets.ModelViewSet):
     # permission_classes = [UdhariPermission, IsAuthenticated]
 
     def get_queryset(self):
-        print(f"Received user: {self.request.user}")
+        # print(f"Received user: {self.request.user}")
         return Udhari.objects.filter(visible_to=self.request.user)
 
     def create(self, request, *args, **kwargs):
@@ -59,39 +59,65 @@ class UdhariViewSet(viewsets.ModelViewSet):
                 return Response({'detail': 'created_by must be either equal to lender or borrower'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             serializer1.save()
             serializer2.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(serializer1.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer1.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        data = UdhariSerializer(data=request.data)
-        if request.user == data['created_by']:
+        instance = self.get_object()
+        instance_id = instance.id
+        self.perform_destroy(instance)
+
+        if request.user == self.get_object().created_by:
             print("Delete two")
-        else:
-            print("delete one")
+            try:
+                pair_instance_id = instance_id - 1 if instance_id % 2 == 0 else instance_id + 1
+                pair_instance = Udhari.objects.get(pk=pair_instance_id)
+                self.perform_destroy(pair_instance)
+            except Udhari.DoesNotExist:
+                print("Maybe already deleted")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
-        self.partial_update(self, request, *args, **kwargs)
+        instance = self.get_object()
+        instance_id = instance.id
+        data = request.data.copy()
+        # Handle changes to visible_to and created_by. visible_to and created_by must not be edited directly
+        data['visible_to'] = instance.visible_to_id
+        data['created_by'] = instance.created_by_id
 
-    def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        if data['lender'] == data['borrower']:
+            return Response({'detail': 'Lender and borrower cannot be same'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        if float(data['amount']) < 0:
+            return Response({'detail': 'Amount must be non-negative'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        if data['created_by'] != data['lender'] and data['created_by'] != data['borrower']:
+            return Response({'detail': 'created_by must be either equal to lender or borrower'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-# class edit(APIView):
-#     def put(self, request, pk, format=None):
-#         # verify JWT before doing anything else
-#         jwt_uid = "udiasnasdsa"
+        # visible_to must be changed if corresponding lender/borrower is replaced with new user
+        if instance_id % 2 == 1:
+            data['visible_to'] = data['borrower']
+        else:
+            data['visible_to'] = data['lender']
 
-#         return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(instance, data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
 
-#     def delete(self, request, pk, format=None):
-#         # verify JWT before doing anything else
-#         jwt_uid = "udiasnasdsa"
-#         udhari = Udhari.objects.get(pk=pk)
-#         if udhari.borrower == jwt_uid or udhari.lender == jwt_uid:
-#             udhari.delete()
-#         else:
-#             return Response(status=status.HTTP_401_UNAUTHORIZED)
-#         if udhari.created_by == jwt_uid:
-#             Udhari.objects.get(pk=pk+1).delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+        if request.user == self.get_object().created_by:
+            print("Update two")
+            try:
+                pair_instance_id = instance_id - 1 if instance_id % 2 == 0 else instance_id + 1
+                pair_instance = Udhari.objects.get(pk=pair_instance_id)
+
+                if pair_instance_id % 2 == 1:
+                    data['visible_to'] = data['borrower']
+                else:
+                    data['visible_to'] = data['lender']
+
+                serializer2 = self.get_serializer(pair_instance, data=data)
+                serializer2.is_valid(raise_exception=True)
+                self.perform_update(serializer2)
+            except Udhari.DoesNotExist:
+                print("Maybe already deleted")
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -9,4 +9,4 @@ class Expense(models.Model):
     user = models.ForeignKey(UdhariUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.amount} by {self.user} at {self.created_at}'
+        return f'{self.id} - {self.amount} by {self.user} at {self.created_at}'

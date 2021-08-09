@@ -10,12 +10,12 @@ class Udhari(models.Model):
     lender = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='udhari_sender')
     created_at = models.DateTimeField(auto_now_add=True)
-    isDone = models.BooleanField(default=False)
-    isMerged = models.BooleanField(default=False)
+    is_done = models.BooleanField(default=False)
+    is_merged = models.BooleanField(default=False)
     created_by = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='udhari_creator')
     visible_to = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='udhari_visible_to')
 
     def __str__(self):
-        return f'{self.id}: {self.amount} by {self.created_by}'
+        return f'{self.id} - {self.amount} by {self.created_by}'
