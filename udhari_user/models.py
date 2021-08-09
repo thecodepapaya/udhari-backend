@@ -32,7 +32,7 @@ class UdhariUser(AbstractBaseUser, PermissionsMixin):
     fcm_token = models.CharField(
         max_length=200, default="", null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ('phone_number', 'country_code', 'name')
     USERNAME_FIELD = 'uid'

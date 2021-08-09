@@ -8,24 +8,19 @@ from rest_framework.renderers import JSONRenderer
 from .models import UdhariUser
 
 
-class POSTUserSerializer(serializers.ModelSerializer):
+# class POSTUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UdhariUser
+#         fields = '__all__'
+
+#     def to_internal_value(self, data):
+#         data['auth_token'] = sha256(
+#             str(datetime.now()).encode('utf-8')).hexdigest()
+#         return data
+
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UdhariUser
-        fields = '__all__'
-
-    def to_internal_value(self, data):
-        data['auth_token'] = sha256(
-            str(datetime.now()).encode('utf-8')).hexdigest()
-        return data
-
-
-class GETUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UdhariUser
-        fields = [
-            'name',
-            'phone_number',
-            'country_code',
-            'photo_url',
-            'uid',
-        ]
+        fields = ['uid', 'name',
+                   'phone_number', 'country_code', 'photo_url', 'fcm_token']
