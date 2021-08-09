@@ -12,6 +12,3 @@ class UdhariSerializer(serializers.ModelSerializer):
     class Meta:
         model = Udhari
         fields = '__all__'
-
-    def to_internal_value(self, data):
-        return super().to_internal_value(data)

@@ -27,8 +27,9 @@ class ExpenseViewSet(viewsets.ModelViewSet):
     permission_classes = [ExpensePermission]
     serializer_class = ExpenseSerializer
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
-    queryset = Expense.objects.all()
 
-    # def get_queryset(self):
-    #     print(f"Received user: {self.request.user}")
-    #     return Expense.objects.filter(user=self.request.user)
+    def get_queryset(self):
+        print(f"Received user: {self.request.user}")
+        return Expense.objects.filter(user=self.request.user)
+
+    # TODO Override create method to verify request.user == request.data.user. Otherwise anyone would be able to create expense with anybody's uid.
