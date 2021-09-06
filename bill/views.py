@@ -25,3 +25,10 @@ class BillViewSet(viewsets.ModelViewSet):
     # permission_classes = [BillPermission]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
     queryset = Bill.objects.all()
+
+
+class BillContributorViewSet(viewsets.ModelViewSet):
+    serializer_class = BillContributorSerializer
+    # permission_classes = [BillPermission]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
+    queryset = BillContributor.objects.all()
