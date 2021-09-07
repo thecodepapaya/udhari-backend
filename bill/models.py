@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from trip.models import Trip
 from udhari_user.models import UdhariUser
@@ -9,6 +10,7 @@ class Bill(models.Model):
         max_digits=6, decimal_places=2, default=0.00)
     notes = models.CharField(max_length=200, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(
         UdhariUser, on_delete=models.CASCADE, related_name='bill_creator')
     belongs_to_trip = models.ForeignKey(
@@ -22,10 +24,16 @@ class BillContributor(models.Model):
     user = models.ForeignKey(UdhariUser, on_delete=models.CASCADE)
     share = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
     amount_contributed = models.DecimalField(
-        max_digits=5, decimal_places=2, default=0.00)
+        max_digits=6, decimal_places=2, default=0.00)
     belongs_to_bill = models.ForeignKey(
         Bill, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(default=timezone.now)
+
+    # class Meta:
+    #     indexes = [
+    #         models.Index(fields=['user',]),
+    #     ]
 
     def __str__(self):
         return f'{self.user} share: {self.share} contributed: {self.amount_contributed}'
