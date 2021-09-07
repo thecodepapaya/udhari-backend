@@ -42,7 +42,7 @@ class BillContributorPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_anonymous:
             return False
-        #TODO add case for viewable only to other contributors of the bill
+        # TODO add case for viewable only to other contributors of the bill
         if request.method in SAFE_METHODS:
             return True
         # Case for edit access by self and bill creator
@@ -102,10 +102,14 @@ class BillContributorViewSet(viewsets.ModelViewSet):
     serializer_class = BillContributorSerializer
     permission_classes = [BillContributorPermission]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
-    queryset = BillContributor.objects.all()
+    # queryset = BillContributor.objects.all()
 
     def get_queryset(self, *args, **kwargs):
-        return BillContributor.objects.filter(belongs_to_bill=self.kwargs['bill_lookup_pk'])
+        # TODO Contributors are visible if user has bill ID by directly visiting the uri
+        if BillContributor.objects.filter(belongs_to_bill=self.kwargs['bill_lookup_pk'], user=self.request.user).exists():
+            return BillContributor.objects.filter(belongs_to_bill=self.kwargs['bill_lookup_pk'])
+        else:
+            return None
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -115,7 +119,6 @@ class BillContributorViewSet(viewsets.ModelViewSet):
             if bill_creator != request.user:
                 return Response({'detail': 'Only the bill creator is allowed to add contributors'}, status=status.HTTP_401_UNAUTHORIZED)
 
-            
             if BillContributor.objects.filter(belongs_to_bill=serializer.validated_data['belongs_to_bill'], user=serializer.validated_data['user']).exists():
                 return Response({'detail': 'Cannot add duplicate entry for user in the same bill'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             serializer.save()
@@ -127,7 +130,7 @@ class BillContributorViewSet(viewsets.ModelViewSet):
         data = deepcopy(request.data)
         data['updated_at'] = timezone.now()
         data['belongs_to_bill'] = self.kwargs['bill_lookup_pk']
-        data['user'] = self.kwargs['bill_lookup_pk']
+        # data['user'] = self.kwargs['bill_lookup_pk']
         serializer = self.get_serializer(self.get_object(), data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
