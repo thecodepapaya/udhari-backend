@@ -26,7 +26,7 @@ class BillContributor(models.Model):
     amount_contributed = models.DecimalField(
         max_digits=6, decimal_places=2, default=0.00)
     belongs_to_bill = models.ForeignKey(
-        Bill, on_delete=models.CASCADE, null=True, blank=True)
+        Bill, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(default=timezone.now)
 

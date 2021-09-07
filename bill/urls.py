@@ -10,10 +10,8 @@ from .views import BillViewSet, BillContributorViewSet
 
 router = routers.SimpleRouter()
 router.register(r'', BillViewSet, basename='bill')
-bill_contributor_router = routers.NestedSimpleRouter(router,r'',lookup="contributor")
+bill_contributor_router = routers.NestedSimpleRouter(router,r'',lookup="bill_lookup")
 bill_contributor_router.register(r'contributor',BillContributorViewSet, basename="bill-contributor")
-# router.register(r'kk/gg', BillContributorViewSet, basename='bill_contributor')
-# urlpatterns = router.urls
 
 urlpatterns = [
     path(r'',include(router.urls)),
