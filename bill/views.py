@@ -119,9 +119,8 @@ class BillContributorViewSet(viewsets.ModelViewSet):
         data = deepcopy(request.data)
         data['updated_at'] = timezone.now()
         data['belongs_to_bill'] = self.kwargs['bill_lookup_pk']
+        data['user'] = BillContributor.objects.get(pk=data['id']).user.uid
         serializer = self.get_serializer(self.get_object(), data=data)
         serializer.is_valid(raise_exception=True)
-        if BillContributor.objects.filter(belongs_to_bill=serializer.validated_data['belongs_to_bill'], user=serializer.validated_data['user']).exists():
-            return Response({'detail': 'Cannot add duplicate entry for user in the same bill'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
