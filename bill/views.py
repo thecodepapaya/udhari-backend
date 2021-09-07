@@ -74,18 +74,9 @@ class BillViewSet(viewsets.ModelViewSet):
             serializer.save()
             contributor = BillContributor.objects.create(
                 user=request.user, belongs_to_bill=Bill.objects.get(pk=serializer.data['id']))
-            # contribution_serializer = BillContributorSerializer(
-            #     data=contributor)
             contributor.save()
-            # if contribution_serializer.is_valid():
-            #     contribution_serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-            # else:
-            #     print("invalid bill contributor")
-            #     return Response(contribution_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         else:
-            print("invalid bill")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
@@ -102,10 +93,8 @@ class BillContributorViewSet(viewsets.ModelViewSet):
     serializer_class = BillContributorSerializer
     permission_classes = [BillContributorPermission]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', ]
-    # queryset = BillContributor.objects.all()
 
     def get_queryset(self, *args, **kwargs):
-        # TODO Contributors are visible if user has bill ID by directly visiting the uri
         if BillContributor.objects.filter(belongs_to_bill=self.kwargs['bill_lookup_pk'], user=self.request.user).exists():
             return BillContributor.objects.filter(belongs_to_bill=self.kwargs['bill_lookup_pk'])
         else:
@@ -130,8 +119,9 @@ class BillContributorViewSet(viewsets.ModelViewSet):
         data = deepcopy(request.data)
         data['updated_at'] = timezone.now()
         data['belongs_to_bill'] = self.kwargs['bill_lookup_pk']
-        # data['user'] = self.kwargs['bill_lookup_pk']
         serializer = self.get_serializer(self.get_object(), data=data)
         serializer.is_valid(raise_exception=True)
+        if BillContributor.objects.filter(belongs_to_bill=serializer.validated_data['belongs_to_bill'], user=serializer.validated_data['user']).exists():
+            return Response({'detail': 'Cannot add duplicate entry for user in the same bill'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
