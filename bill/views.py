@@ -38,11 +38,9 @@ class BillPermission(BasePermission):
 class BillContributorPermission(BasePermission):
     message = "Bill contributor can only be modified by the bill contributor or bill creator. Bill contributor can be viewed by all bill contributors"
 
-    # TODO add permissions
     def has_object_permission(self, request, view, obj):
         if request.user.is_anonymous:
             return False
-        # TODO add case for viewable only to other contributors of the bill
         if request.method in SAFE_METHODS:
             return True
         # Case for edit access by self and bill creator

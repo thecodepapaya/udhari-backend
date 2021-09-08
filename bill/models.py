@@ -33,6 +33,7 @@ class BillContributor(models.Model):
     # class Meta:
     #     indexes = [
     #         models.Index(fields=['user',]),
+    #         models.Index(fields=['belongs_to_bill',]),
     #     ]
 
     def __str__(self):
